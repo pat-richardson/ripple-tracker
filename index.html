@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Auto Coin</title>
+  </head>
+  <body>
+    <!--<h1>Hello World!</h1>-->
+    <!-- All of the Node.js APIs are available in this renderer process. -->
+    <!--We are using Node.js <script>document.write(process.versions.node)</script>,
+    Chromium <script>document.write(process.versions.chrome)</script>,
+    and Electron <script>document.write(process.versions.electron)</script>.-->
+
+    <h2>Current Exchange Rates</h2>
+    <h4>Last Updated: <span id="update_ts"></span></h4>
+    <div class="market-watch-board"></div>
+
+  </body>
+  <!-- Insert this line above script imports  -->
+  <script>if (typeof module === 'object') {window.module = module; module = undefined;}</script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+  <script>
+    // You can also require other files to run in this process
+    require('./renderer.js')
+    require('./app.js')
+  </script>
+  <script>if (window.module) module = window.module;</script>
+  <style>
+  .market-watch-board {
+    border: 1px solid black;
+    width: 60%;
+  }
+
+  #update_ts {
+    font-weight: normal;
+  }
+
+  li {
+    list-style: none;
+  }
+  </style>
+</html>
