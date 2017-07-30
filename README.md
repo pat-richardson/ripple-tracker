@@ -1,4 +1,4 @@
-# Ripple Ticker
+# Ripple Tracker
 
 **Clone to monitor cryptocurrency values**
 
