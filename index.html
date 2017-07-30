@@ -13,8 +13,14 @@
 
     <h2>Current Exchange Rates</h2>
     <h4>Last Updated: <span id="update_ts"></span></h4>
-    <div class="market-watch-board"></div>
+    <button id="hide-btn">Hide Controls</button>
 
+    <div class="market-watch-board"></div>
+        
+    <input class="wallet-controls" id="wallet-address" type="text" placeholder="enter ripple wallet address"></input>
+    <button class="wallet-controls" id="wallet-btn">Submit</button>
+    <h4 class="hide-element">Total XRP: <span id="xrp_total"></span></h4>
+    <h4 class="hide-element">Current Value: <span id="xrp_value"></span></h4>
   </body>
   <!-- Insert this line above script imports  -->
   <script>if (typeof module === 'object') {window.module = module; module = undefined;}</script>
@@ -25,18 +31,35 @@
     require('./app.js')
   </script>
   <script>if (window.module) module = window.module;</script>
+  <script>
+	document.addEventListener("keydown", function (e) {
+		if (e.which === 123) {
+			require('remote').getCurrentWindow().toggleDevTools();
+		} else if (e.which === 116) {
+			location.reload();
+		}
+	});
+</script>
   <style>
-  .market-watch-board {
-    border: 1px solid black;
-    width: 100%;
-  }
+li {
+  list-style: none;
+}
 
-  #update_ts {
-    font-weight: normal;
-  }
+.market-watch-board {
+  border: 1px solid black;
+  width: 60%;
+}
 
-  li {
-    list-style: none;
-  }
+#wallet-address {
+  margin-top: 1rem;
+}
+
+#update_ts, #xrp_total, #xrp_value {
+  font-weight: normal;
+}
+
+.hide-element {
+  display:none;
+}
   </style>
 </html>
