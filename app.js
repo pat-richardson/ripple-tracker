@@ -3,6 +3,7 @@
    * Main application config
    * Add currencies to track to config.currencies
    */
+  var envWalletAddress = process.env.RIPPLE_WALLET || '';
   var config = {
     baseUrl: 'https://coincap.io/sscoins',
     ripple_url: 'https://data.ripple.com/v2/accounts/PLACEHOLDER/transactions?&limit=15&descending=true',
@@ -139,10 +140,12 @@
 
   //update application config with input ripple address
   function setWalletAddress() {
-    var userAddress = $('#wallet-address').val();
-    if(userAddress !== '') {
+    var userAddress = $('#wallet-address').val() || '';
+    var walletAddress = userAddress !== '' ? userAddress : envWalletAddress;
+
+    if(walletAddress !== '') {
       $('#wallet-address').val('');
-      config.wallet.address = userAddress;
+      config.wallet.address = walletAddress;
       getWalletData();
     } else {
       alert('please enter a valid address');
@@ -166,6 +169,11 @@
   function init() {
     document.querySelector('#wallet-btn').addEventListener('click', setWalletAddress);
     document.querySelector('#hide-btn').addEventListener('click', hideControls);
+    //set wallet to env address if saved
+    if(envWalletAddress !== '') {
+      setWalletAddress();
+    }
+
     $.get(config.baseUrl)
         .done(filterResults);
     update();

@@ -16,6 +16,10 @@ git clone https://github.com/pat-richardson/ripple-tracker.git
 cd ripple-tracker
 # Install dependencies
 npm install
+# (Optional) Update ~/.bashrc to set your wallet address as default on load
+vi ~/.bashrc
+export RIPPLE_WALLET=YOUR_WALLET_ADDRESS_HERE
+source ~/.bashrc
 # Run the app
 npm start
 ```
