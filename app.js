@@ -1,5 +1,5 @@
 (function() {
-
+//add new currencies below
  var config = {
   baseUrl: 'https://coincap.io/sscoins',
   currencies: ['BTC', 'ETH', 'XRP'],
