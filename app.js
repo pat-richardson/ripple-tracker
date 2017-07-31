@@ -120,7 +120,9 @@
     var count = data.count;
     var zerpTotal = data.transactions.map(function(el,index,array) {
       if(el.hasOwnProperty('tx')) {
-            return el.tx.Amount; 
+        if(el.tx.TransactionType === 'Payment' && Object.prototype.toString.call(el.tx.Amount) === '[object String]') {
+          return el.tx.Amount;
+        }  
       }
     }).filter(function(el,i,a) {
       return el !== undefined;
