@@ -5,19 +5,15 @@
     <title>Auto Coin</title>
   </head>
   <body>
-    <!--<h1>Hello World!</h1>-->
-    <!-- All of the Node.js APIs are available in this renderer process. -->
-    <!--We are using Node.js <script>document.write(process.versions.node)</script>,
-    Chromium <script>document.write(process.versions.chrome)</script>,
-    and Electron <script>document.write(process.versions.electron)</script>.-->
 
-    <h2>Current Exchange Rates</h2>
+   <!-- <h2>Current Exchange Rates</h2> -->
     <h4>Last Updated: <span id="update_ts"></span></h4>
     <button id="hide-btn">Hide Controls</button>
 
     <div class="market-watch-board"></div>
         
     <input class="wallet-controls" id="wallet-address" type="text" placeholder="enter ripple wallet address"></input>
+    <!-- <input class="wallet-controls" id="wallet-amount" type="text" placeholder="enter ripple wallet amount"></input> -->
     <button class="wallet-controls" id="wallet-btn">Submit</button>
     <h4 class="hide-element">Total XRP: <span id="xrp_total"></span></h4>
     <h4 class="hide-element">Current Value: <span id="xrp_value"></span></h4>

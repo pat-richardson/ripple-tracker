@@ -6,7 +6,8 @@
   var envWalletAddress = process.env.RIPPLE_WALLET || '';
   var config = {
     baseUrl: 'https://coincap.io/sscoins',
-    ripple_url: 'https://data.ripple.com/v2/accounts/PLACEHOLDER/transactions?&limit=15&descending=true',
+    ripple_transaction_url: 'https://data.ripple.com/v2/accounts/PLACEHOLDER/transactions?&limit=15&descending=true',
+    ripple_balance_url: 'https://data.ripple.com/v2/accounts/PLACEHOLDER/balances',
     currencies: ['BTC', 'ETH', 'XRP'],
     current_rate: {},
     last_updated: null,
@@ -118,23 +119,23 @@
   //extract transaction data from ripple api and update wallet
   function extractTransactionsFromWalletResponse(data) {
     var count = data.count;
-    var zerpTotal = data.transactions.map(function(el,index,array) {
-      if(el.hasOwnProperty('tx')) {
-        if(el.tx.TransactionType === 'Payment' && Object.prototype.toString.call(el.tx.Amount) === '[object String]') {
-          return el.tx.Amount;
+    var zerpTotal = data.balances.map(function(el,index,array) {
+      if(el.hasOwnProperty('currency')) {
+        if(el.currency.toLowerCase() === 'xrp') {
+          return el.value;
         }  
       }
     }).filter(function(el,i,a) {
       return el !== undefined;
-    }).reduce(add);
-    config.wallet.amount = formatZerps(zerpTotal); 
+    });
+    config.wallet.amount = zerpTotal; 
     showZerpsStats();
   }
 
   //request total XRP for ripple address from api
   function getWalletData() {
     if(config.wallet.address !== null) {
-      var url = config.ripple_url.replace('PLACEHOLDER', config.wallet.address);
+      var url = config.ripple_balance_url.replace('PLACEHOLDER', config.wallet.address);
       $.get(url)
         .done(extractTransactionsFromWalletResponse);
     }
@@ -146,12 +147,16 @@
     var walletAddress = userAddress !== '' ? userAddress : envWalletAddress;
 
     if(walletAddress !== '') {
-      $('#wallet-address').val('');
-      config.wallet.address = walletAddress;
-      getWalletData();
-    } else {
-      alert('please enter a valid address');
-    }
+        $('#wallet-address').val('');
+        config.wallet.address = walletAddress;
+        //hide controls
+        setTimeout(function() {
+          hideControls();
+        },2000);
+        getWalletData();
+      } else {
+        alert('please enter a valid address');
+      }
   }
 
   //update ripple value display with amount owned * latest valuation
