@@ -5,10 +5,10 @@
    */
   var envWalletAddress = process.env.RIPPLE_WALLET || '';
   var config = {
-    baseUrl: 'https://coincap.io/sscoins',
+    baseUrl: 'https://coincap.io/front',
     ripple_transaction_url: 'https://data.ripple.com/v2/accounts/PLACEHOLDER/transactions?&limit=15&descending=true',
     ripple_balance_url: 'https://data.ripple.com/v2/accounts/PLACEHOLDER/balances',
-    currencies: ['BTC', 'ETH', 'XRP'],
+    currencies: ['BTC', 'LTC', 'XRP'],
     current_rate: {},
     last_updated: null,
     wallet: {
@@ -35,12 +35,18 @@
   function updateBoard() {
     var list = $('<ul/>');
     for(var i = 0; i < config.currencies.length; i++) {
-      var key = config.currencies[i];    
-      var listItem = $('<li/>');
-      var textItem = $('<p>')
-            .text(config.current_rate[key].name + ': $' + config.current_rate[key].price + ' ('+config.current_rate[key].trend +'%)')
-            .appendTo(listItem);
-      $(listItem).appendTo(list);
+      try {
+        var key = config.currencies[i];    
+        var listItem = $('<li/>');
+        var textItem = $('<p>')
+              .text(config.current_rate[key].name + ': $' + config.current_rate[key].price + ' ('+config.current_rate[key].trend +'%)')
+              .appendTo(listItem);
+        $(listItem).appendTo(list);
+      }
+      catch(err) {
+        //console.log(err);
+      }
+
     }
     $('.market-watch-board').html(list);
     updateRippleNetworth();
@@ -68,8 +74,13 @@
   //filter api results and keep currencies set in config
   function filterResults(data) {
     var results = data.filter(function(item) {
-      return config.currencies.indexOf(item.short.toUpperCase()) > -1;
-    });
+      try {
+         return config.currencies.indexOf(item.short.toUpperCase()) > -1;
+      }
+      catch(err) {
+         //console.log(err);
+      }  
+  });
     updateCurrencyData(results);
   }
 
@@ -109,6 +120,13 @@
   //display XRP total and value
   function showZerpsStats() {
     $('.hide-element').toggleClass();
+  }
+
+  //add commas to number to separate thousands
+  function numberWithCommas(x) {
+    var parts = x.toString().split(".");
+    parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    return parts.join(".");
   }
 
   //hide or show ripple form controls when clicked
@@ -163,8 +181,8 @@
   function updateRippleNetworth() {
     if(config.wallet.address !== null) {
       config.wallet.value = '$' + parseFloat((config.current_rate.XRP.price * config.wallet.amount).toFixed(2));
-      $('#xrp_total').text(config.wallet.amount);
-      $('#xrp_value').text(config.wallet.value);
+      $('#xrp_total').text(numberWithCommas(config.wallet.amount));
+      $('#xrp_value').text(numberWithCommas(config.wallet.value));
     }
   }
 
